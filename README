@@ -1,0 +1,9 @@
+This is designed to run on a guest VM in virtualbox
+Please use the desktop version and the primary user as openmrs
+The script will use /home/openmrs/.ssh/github to pull from github, so please put your github key there.
+Alternatively, you can shared your .ssh directory with the VM and have the key their called github
+
+It is configured to go to 2222 on remote machines, so set up port forwarding so that you can go there.
+Finally, add your public key for ssh to /root/.ssh/authorized_keys
+
+The primary purpose of this script was to configure shared folders (from the host), but maven can't deploy when the user doesn't own the files.

@@ -1,0 +1,17 @@
+---
+- include: install_java.yml
+- include: mount_shared.yml
+- include: git.yml
+
+- name: Install Dependencies
+  apt:
+    name={{item}}
+    state=present
+  with_items:
+    - maven2
+    - mysql-server
+
+- include: mysql.yml
+
+- name: Post install instructions
+  debug: msg="Please navigate to /git and run 'mvn clean install'. After that navigate to /git/webapp and run 'mvn jetty:run'. Then open up firefox and go to localhost:8080/openmrs"

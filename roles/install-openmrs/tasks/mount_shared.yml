@@ -1,0 +1,51 @@
+---
+
+- name: Get Virtualbox version number
+  local_action: shell vboxmanage --version | cut -d'r' -f1
+  register: VBoxVersion
+
+- name: Set Version Number
+  set_fact:
+     VBoxVersion={{VBoxVersion.stdout}}
+
+- name: Install dependencies
+  apt: 
+     name={{item}}
+     state=present
+  with_items:
+     - gcc
+     - make
+
+- name: Download guest addtion
+  get_url:
+      url="http://download.virtualbox.org/virtualbox/{{VBoxVersion}}/VBoxGuestAdditions_{{VBoxVersion}}.iso"
+      dest=/root/vboximage
+
+- name: Mount the guest additions iso
+  mount: 
+      src=/root/vboximage
+      name=/mnt
+      fstype=iso9660
+      state=mounted
+
+- name: Install guest additions
+  shell: /mnt/VBoxLinuxAdditions.run
+  ignore_errors: yes
+
+- name: Unmount install
+  shell: umount /mnt
+
+- name: Mount host directory
+  mount: 
+      src=git
+      name=/git
+      fstype=vboxsf
+      state=mounted
+
+- name: Mount ssh directory
+  mount: 
+      src=.ssh
+      name=/home/openmrs/.ssh
+      fstype=vboxsf
+      state=mounted
+

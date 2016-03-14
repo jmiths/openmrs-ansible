@@ -1,0 +1,23 @@
+---
+- name: Install mysql manipulation depends
+  apt:
+      name={{item}}
+      state=installed
+  with_items:
+      - libmysqlclient-dev
+      - python-dev
+      - python-pip
+
+- name: More depends
+  pip:
+      name=mysql-python
+      state=installed
+
+- name: Set root user password for mysql
+  mysql_user: 
+    name=root
+    password="openmrs"
+    login_user="root"
+    login_password=""
+    state=present
+  tags: mysql

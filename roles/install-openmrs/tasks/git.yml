@@ -1,0 +1,16 @@
+---
+
+- name: Install git
+  apt: 
+    name=git
+    state=present
+
+- name: Grab openmrs off github
+  git:
+     repo=git@github.com:openmrs/openmrs-core.git
+     dest=/git
+     accept_hostkey=yes
+     key_file=/home/openmrs/.ssh/github
+
+- name: Chown git (because become_user seems borked)
+  shell: chown -R openmrs.openmrs /git

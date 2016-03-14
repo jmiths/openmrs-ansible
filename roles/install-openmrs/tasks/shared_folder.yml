@@ -1,0 +1,11 @@
+---
+- name: Make directory to put git in
+  shell: mkdir /git
+
+- name: Am I a host or guest? (Virtualbox is installed?)
+  shell: dpkg -l | grep virtualbox
+  register: VBoxInstalled
+
+- name: I need to do run some commands to mount the folder
+  include: mount_shared.yml
+  when: VBoxInstalled.rc == 0
